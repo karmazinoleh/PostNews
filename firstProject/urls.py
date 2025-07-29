@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('main.urls')),
     path('news/', include('news.urls')),
     path('myauth/', include('myauth.urls')),
+    path('api/', include('api.urls')),
 ]#$+ static(settings.STATICURL, document_root=settings.STATICFILES_DIR)

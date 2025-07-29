@@ -16,13 +16,22 @@ class NewsDetailView(DetailView):
     context_object_name = 'article'
 
 class NewsUpdateView(UpdateView):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user != self.get_object().author:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
     model = Articles
     template_name = 'news/create.html'
 
     form_class = ArticlesForm
 
-
 class NewsDeleteView(DeleteView):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user != self.get_object().author:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
     model = Articles
     success_url = '/news/'
     template_name = 'news/news_delete.html'

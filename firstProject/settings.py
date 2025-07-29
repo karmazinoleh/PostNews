@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'main',
     'news',
     'myauth',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

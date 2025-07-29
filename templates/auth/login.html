@@ -1,0 +1,18 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <label for="">username</label>
+        <input type="text" name="username" id="">
+        <label for="">Password</label>
+        <input type="password" name="password" id="">
+        <input type="submit" value="Login">
+        <span>{{ error }}</span>
+    </form>
+    <a href="{% url 'register' %}">Register</a>
+{% endblock %}

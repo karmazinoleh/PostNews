@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from news.models import Articles
 from news.forms import ArticlesForm
@@ -27,11 +29,16 @@ class NewsDeleteView(DeleteView):
 
 @login_required(login_url="/myauth/")
 def create(request):
+    if not request.user.groups.filter(name='Publisher').exists():
+        raise PermissionDenied
+
     error = ''
     if request.method == 'POST':
         form = ArticlesForm(request.POST)
         if form.is_valid():
-            form.save()
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
             return redirect('news_home')
         else:
             error = 'Invalid form'

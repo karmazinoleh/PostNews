@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect
 
 from myauth.forms import UserForm
@@ -31,6 +31,7 @@ def register_view(request):
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
+        is_publisher = request.POST.get('is_publisher') == 'on'
 
         if password1 != password2:
             error = 'Incorrect data'
@@ -38,6 +39,9 @@ def register_view(request):
             error = 'Username already taken'
         else:
             user = User.objects.create_user(username=username, password=password1)
+            if is_publisher:
+                group = Group.objects.get(name='Publisher')
+                user.groups.add(group)
             login(request, user)
             return redirect('news_home')
 

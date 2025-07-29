@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from news.models import Articles
-from news.forms import ArticlesForm
+from news.models import Articles, Comment
+from news.forms import ArticlesForm, CommentsForm
 from django.views.generic import DetailView, UpdateView, DeleteView
 
 def news_home(request):
@@ -14,6 +14,26 @@ class NewsDetailView(DetailView):
     model = Articles
     template_name = 'news/details_view.html'
     context_object_name = 'article'
+
+    form = CommentsForm
+    def post(self, request, *args, **kwargs):
+        form = CommentsForm(request.POST)
+        if form.is_valid():
+            article = self.get_object()
+            form.instance.author = request.user
+            form.instance.article = article
+            form.save()
+
+            return redirect('news_home')
+
+    def get_context_data(self, **kwargs):
+        post_comments = Comment.objects.filter(article=self.get_object())
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'post_comments': post_comments,
+            'form': self.form
+        })
+        return context
 
 class NewsUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):

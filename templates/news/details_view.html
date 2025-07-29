@@ -8,4 +8,17 @@
     <h1>{{ article.title }}</h1>
     <p>{{ article.date }}</p>
     <p>{{ article.text }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="read-comments">
+            {% for comment in post_comments %}
+                {{ comment }}
+            {% endfor %}
+        </div>
+
+        <div class="comment-create">
+            {{ form }}
+            <button class="btn btn-success" type="submit">Create</button>
+        </div>
+    </form>
 {% endblock %}

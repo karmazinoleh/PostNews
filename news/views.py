@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from news.models import Articles
 from news.forms import ArticlesForm
@@ -24,6 +25,7 @@ class NewsDeleteView(DeleteView):
     success_url = '/news/'
     template_name = 'news/news_delete.html'
 
+@login_required(login_url="/myauth/")
 def create(request):
     error = ''
     if request.method == 'POST':

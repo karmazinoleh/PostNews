@@ -22,4 +22,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-] + static(settings.STATICURL, document_root=settings.STATICFILES_DIR)
+    path('news/', include('news.urls')),
+]#$+ static(settings.STATICURL, document_root=settings.STATICFILES_DIR)
